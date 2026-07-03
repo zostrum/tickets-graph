@@ -116,5 +116,5 @@ export function validateGraphData(graphData: GraphData): GraphValidationWarning[
 }
 
 function createEdgeId(from: string, to: string): string {
-  return `${from}->${to}`;
+  return `${from} => ${to}`;
 }
