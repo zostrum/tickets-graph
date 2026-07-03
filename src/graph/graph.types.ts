@@ -65,9 +65,8 @@ export interface GraphQueryResult {
 
 export interface GraphValidationWarning {
   code: 'DUPLICATE_NODE' | 'UNKNOWN_EDGE_SOURCE' | 'UNKNOWN_EDGE_TARGET' | 'ISOLATED_NODE';
-
   message: string;
-  nodeName?: string;
+  node?: GraphNode;
   edge?: {
     from: string;
     to: string;
@@ -83,10 +82,4 @@ export interface GraphRouteFilterOptions {
   startPublic?: boolean;
   endSink?: boolean;
   hasVulnerability?: boolean;
-}
-
-export interface GraphQueryResult {
-  nodes: GraphNode[];
-  edges: GraphEdge[];
-  routes: GraphRoute[];
 }

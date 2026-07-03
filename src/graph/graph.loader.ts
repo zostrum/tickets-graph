@@ -66,7 +66,7 @@ export function validateGraphData(graphData: GraphData): GraphValidationWarning[
       warnings.push({
         code: 'DUPLICATE_NODE',
         message: `Duplicate node found: ${node.name}`,
-        nodeName: node.name,
+        node,
       });
 
       continue;
@@ -107,7 +107,7 @@ export function validateGraphData(graphData: GraphData): GraphValidationWarning[
       warnings.push({
         code: 'ISOLATED_NODE',
         message: `Node has no incoming or outgoing edges: ${node.name}`,
-        nodeName: node.name,
+        node,
       });
     }
   }

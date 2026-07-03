@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "test:compile": "tsc -p tsconfig.test.json",
+    "test": "npm run test:compile && node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.cjs",
+    "test:watch": "npm run test:compile && node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.cjs --watch",
+    "test:coverage": "npm run test:compile && node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.config.cjs --coverage"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +18,9 @@
   "type": "module",
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
     "@types/node": "^26.0.1",
+    "jest": "^30.4.2",
     "prettier": "^3.9.4",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"
