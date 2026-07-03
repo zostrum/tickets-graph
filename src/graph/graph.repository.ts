@@ -15,6 +15,7 @@ export class GraphRepository {
     this.outgoingEdgesByNode = this.createOutgoingEdgesMap(graphData.edges);
     this.incomingEdgesByNode = this.createIncomingEdgesMap(graphData.edges);
   }
+
   /**
    * Get all nodes
    * @returns {GraphNode[]}

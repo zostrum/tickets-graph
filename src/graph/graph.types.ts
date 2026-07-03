@@ -9,12 +9,6 @@ export interface Vulnerability {
   metadata?: Record<string, unknown>;
 }
 
-/**
- * Raw node shape from train-ticket-be.json.
- *
- * Some fields are service-specific, while infrastructure nodes like RDS/SQS
- * may only contain name, kind, and metadata.
- */
 export interface RawGraphNode {
   name: string;
   kind: NodeKind;
@@ -25,14 +19,6 @@ export interface RawGraphNode {
   metadata?: Record<string, unknown>;
 }
 
-/**
- * Raw edge shape from train-ticket-be.json.
- *
- * Important:
- * The source file contains both:
- * - { from: string, to: string[] }
- * - { from: string, to: string }
- */
 export interface RawGraphEdge {
   from: string;
   to: string | string[];
@@ -43,12 +29,6 @@ export interface RawGraphData {
   edges: RawGraphEdge[];
 }
 
-/**
- * Internal normalized node.
- *
- * For now it is close to RawGraphNode, but we keep it as a separate type
- * so the app is not tightly coupled to the original JSON format.
- */
 export interface GraphNode {
   name: string;
   kind: NodeKind;
@@ -59,11 +39,6 @@ export interface GraphNode {
   metadata?: Record<string, unknown>;
 }
 
-/**
- * Internal normalized edge.
- *
- * Every edge has exactly one source and one target.
- */
 export interface GraphEdge {
   id: string;
   from: string;
@@ -75,25 +50,13 @@ export interface GraphData {
   edges: GraphEdge[];
 }
 
-/**
- * A route is a shortest path between two graph nodes.
- *
- * Example:
- * frontend -> admin-basic-info-service -> price-service
- */
 export interface GraphRoute {
   id: string;
-  nodeNames: string[];
-  edges: GraphEdge[];
-  distance: number;
+  from: GraphNode;
+  to: GraphNode;
+  edge: GraphEdge;
 }
 
-/**
- * Response shape that should be easy to render on the client side.
- *
- * The assignment explicitly asks for a graph structure that is easy
- * to render in a client application. This type represents that output.
- */
 export interface GraphQueryResult {
   nodes: GraphNode[];
   edges: GraphEdge[];
@@ -114,4 +77,16 @@ export interface GraphValidationWarning {
 export interface LoadedGraph {
   data: GraphData;
   warnings: GraphValidationWarning[];
+}
+
+export interface GraphRouteFilterOptions {
+  startPublic?: boolean;
+  endSink?: boolean;
+  hasVulnerability?: boolean;
+}
+
+export interface GraphQueryResult {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  routes: GraphRoute[];
 }
