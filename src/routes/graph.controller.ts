@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 
-import type { GraphRouteFilterOptions } from '../graph/index.js';
 import { GraphService } from '../graph/index.js';
+import { formatGraphRoutesQueryErrors, graphRoutesQuerySchema } from './graph.query-schema.js';
 
 export class GraphController {
   constructor(private readonly graphService: GraphService) {}
@@ -20,37 +20,29 @@ export class GraphController {
   };
 
   getRoutes = (req: Request, res: Response): void => {
-    const options = parseRouteFilterOptions(req.query);
-    const result = this.graphService.getRoutes(options);
+    const parsedQuery = graphRoutesQuerySchema.safeParse(req.query);
+
+    if (!parsedQuery.success) {
+      res.status(400).json({
+        error: {
+          message: 'Invalid route query parameters.',
+          details: formatGraphRoutesQueryErrors(parsedQuery.error),
+        },
+      });
+
+      return;
+    }
+
+    const result = this.graphService.getRoutes(parsedQuery.data);
 
     res.status(200).json({
       data: result,
       meta: {
-        filters: options,
+        filters: parsedQuery.data,
         nodesCount: result.nodes.length,
         edgesCount: result.edges.length,
         routesCount: result.routes.length,
       },
     });
   };
-}
-
-function parseRouteFilterOptions(query: Request['query']): GraphRouteFilterOptions {
-  return {
-    startPublic: parseOptionalBoolean(query.startPublic),
-    endSink: parseOptionalBoolean(query.endSink),
-    hasVulnerability: parseOptionalBoolean(query.hasVulnerability),
-  };
-}
-
-function parseOptionalBoolean(value: unknown): boolean | undefined {
-  if (value === 'true') {
-    return true;
-  }
-
-  if (value === 'false') {
-    return false;
-  }
-
-  return undefined;
 }
