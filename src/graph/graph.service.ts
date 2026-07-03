@@ -18,6 +18,7 @@ export class GraphService {
   getRoutes(options: GraphRouteFilterOptions = {}): GraphQueryResult {
     const filters = getEnabledRouteFilters(options);
 
+    // If we want to change filter logic from AND to OR, then change every() to some()
     const routes = this.getAllValidRoutes().filter((route) => filters.every((filter) => filter.apply(route)));
 
     return this.createGraphQueryResultFromRoutes(routes);

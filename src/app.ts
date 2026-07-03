@@ -1,11 +1,14 @@
-import express from 'express';
+import express, { type Express } from 'express';
 
-export const app = express();
+import { GraphService } from './graph/index.js';
+import { createGraphRouter } from './routes/index.js';
 
-app.use(express.json());
+export function createApp(graphService: GraphService): Express {
+  const app = express();
 
-app.get('/health', (_req, res) => {
-  res.status(200).json({
-    status: 'ok',
-  });
-});
+  app.use(express.json());
+
+  app.use('/api/graph', createGraphRouter(graphService));
+
+  return app;
+}
